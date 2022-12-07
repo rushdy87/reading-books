@@ -1,0 +1,33 @@
+Deeper Dive into Hooks!
+
+** useEffect:
+Tricky things around useEffect:
+1- Understanding when our arrow function gets called:
+  a- second argument is []: called after first render, never called agin.
+  b- No second argument: called after ferst render, and called after every re-render.
+  c- second argument is [some-state]: called after ferst render, and called after re-render if
+      'some-state' variable changed.
+2- Understanding the arrow function's return value:
+  - the only thing we can return from a useEffect function -first parmeter- is a function (cleanup).
+  - cleanup only gets run if you call useEffect agin - second parmeter has [someState] or nothing.
+  - the purpose of cleanup function to do some workes before our next useEffect run- like remove
+    an event handler. (see: https://codesandbox.io/s/pensive-hypatia-f7cjb6?file=/src/App.js)
+3- Understanding stale variable refernces.
+
+** During the second render, we're creating a brand new state -with the new value in setState.
+** ESlint is an open-source library that's commonly used by React developers to enforce rules 
+    about maintaining the code standard across the project. It's fully customizable so you can 
+    configure the desired rules yourself. Linintng your code can help you spot any would be bugs.
+
+** useCallback:
+  * Hook to help you tell React that your function isn't actually changing over time.
+  * Fixes bugs around useEffect and other similer situations.
+  * Follows similar conventions as useEffect (second argument is an array)
+
+const stableFetchBooks= useCallback(
+  fetchBooks,
+  []
+);
+* Behavior is different after first render:
+  - If second argument is an empty array, useCallback gives you back the original fetchBooks from first render.
+  - If second argument has elements that have changed since last render, useCallback gives you the new version of 'fetchBooks'
